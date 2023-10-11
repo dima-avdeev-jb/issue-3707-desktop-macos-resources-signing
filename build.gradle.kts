@@ -30,6 +30,20 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "KotlinJvmComposeDesktopApplication"
             packageVersion = "1.0.0"
+
+            appResourcesRootDir.set(project.layout.projectDirectory.dir("resources"))
+            println("outputBaseDir: ${outputBaseDir.get()}")
         }
+    }
+}
+
+afterEvaluate {
+    tasks.getByName<Sync>("prepareAppResources") {
+        println("destinationDir: ${destinationDir.absolutePath}")
+    }
+
+    tasks.getByName<org.jetbrains.compose.desktop.application.tasks.AbstractJPackageTask>("packageReleaseDmg") {
+        files.from(project.layout.projectDirectory.dir("workaround-binary-dir"))
+
     }
 }
